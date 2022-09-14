@@ -1,0 +1,14 @@
+syntax = "proto3";
+package express.express;
+
+import "gogoproto/gogo.proto";
+import "express/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "express/x/express/types";
+
+// GenesisState defines the express module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}
