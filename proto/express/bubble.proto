@@ -1,7 +1,7 @@
 syntax = "proto3";
 package express.express;
 
-import "express/thought.proto"
+import "express/thought.proto";
 
 option go_package = "express/x/express/types";
 

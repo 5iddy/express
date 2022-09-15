@@ -5,38 +5,58 @@ import { util, configure, Writer, Reader } from "protobufjs/minimal";
 export const protobufPackage = "express.express";
 
 export interface Bubble {
-  index: number;
+  /** bubbleId */
+  id: number;
+  /** Who created it -> creators wallet address */
+  creator: string;
+  /** Name or title of the bubble */
   title: string;
+  /**
+   * any extra info that needs to be stored with the bubble
+   * probably a json encoded string
+   */
   extension: string;
+  /** any extra info that is needed to decode the extension string */
+  extensionType: string;
+  /** An array of thoughtIds that are part of this Bubble */
   thoughtIds: number[];
+  /** An array of bubbleIds that are part of this Bubble */
   bubbleIds: number[];
 }
 
 const baseBubble: object = {
-  index: 0,
+  id: 0,
+  creator: "",
   title: "",
   extension: "",
+  extensionType: "",
   thoughtIds: 0,
   bubbleIds: 0,
 };
 
 export const Bubble = {
   encode(message: Bubble, writer: Writer = Writer.create()): Writer {
-    if (message.index !== 0) {
-      writer.uint32(8).uint64(message.index);
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    if (message.creator !== "") {
+      writer.uint32(18).string(message.creator);
     }
     if (message.title !== "") {
-      writer.uint32(18).string(message.title);
+      writer.uint32(26).string(message.title);
     }
     if (message.extension !== "") {
-      writer.uint32(26).string(message.extension);
+      writer.uint32(34).string(message.extension);
     }
-    writer.uint32(34).fork();
+    if (message.extensionType !== "") {
+      writer.uint32(42).string(message.extensionType);
+    }
+    writer.uint32(50).fork();
     for (const v of message.thoughtIds) {
       writer.uint64(v);
     }
     writer.ldelim();
-    writer.uint32(42).fork();
+    writer.uint32(58).fork();
     for (const v of message.bubbleIds) {
       writer.uint64(v);
     }
@@ -54,15 +74,21 @@ export const Bubble = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.index = longToNumber(reader.uint64() as Long);
+          message.id = longToNumber(reader.uint64() as Long);
           break;
         case 2:
-          message.title = reader.string();
+          message.creator = reader.string();
           break;
         case 3:
-          message.extension = reader.string();
+          message.title = reader.string();
           break;
         case 4:
+          message.extension = reader.string();
+          break;
+        case 5:
+          message.extensionType = reader.string();
+          break;
+        case 6:
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
@@ -72,7 +98,7 @@ export const Bubble = {
             message.thoughtIds.push(longToNumber(reader.uint64() as Long));
           }
           break;
-        case 5:
+        case 7:
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
@@ -94,10 +120,15 @@ export const Bubble = {
     const message = { ...baseBubble } as Bubble;
     message.thoughtIds = [];
     message.bubbleIds = [];
-    if (object.index !== undefined && object.index !== null) {
-      message.index = Number(object.index);
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
     } else {
-      message.index = 0;
+      message.id = 0;
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
     }
     if (object.title !== undefined && object.title !== null) {
       message.title = String(object.title);
@@ -108,6 +139,11 @@ export const Bubble = {
       message.extension = String(object.extension);
     } else {
       message.extension = "";
+    }
+    if (object.extensionType !== undefined && object.extensionType !== null) {
+      message.extensionType = String(object.extensionType);
+    } else {
+      message.extensionType = "";
     }
     if (object.thoughtIds !== undefined && object.thoughtIds !== null) {
       for (const e of object.thoughtIds) {
@@ -124,9 +160,12 @@ export const Bubble = {
 
   toJSON(message: Bubble): unknown {
     const obj: any = {};
-    message.index !== undefined && (obj.index = message.index);
+    message.id !== undefined && (obj.id = message.id);
+    message.creator !== undefined && (obj.creator = message.creator);
     message.title !== undefined && (obj.title = message.title);
     message.extension !== undefined && (obj.extension = message.extension);
+    message.extensionType !== undefined &&
+      (obj.extensionType = message.extensionType);
     if (message.thoughtIds) {
       obj.thoughtIds = message.thoughtIds.map((e) => e);
     } else {
@@ -144,10 +183,15 @@ export const Bubble = {
     const message = { ...baseBubble } as Bubble;
     message.thoughtIds = [];
     message.bubbleIds = [];
-    if (object.index !== undefined && object.index !== null) {
-      message.index = object.index;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
     } else {
-      message.index = 0;
+      message.id = 0;
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
     }
     if (object.title !== undefined && object.title !== null) {
       message.title = object.title;
@@ -158,6 +202,11 @@ export const Bubble = {
       message.extension = object.extension;
     } else {
       message.extension = "";
+    }
+    if (object.extensionType !== undefined && object.extensionType !== null) {
+      message.extensionType = object.extensionType;
+    } else {
+      message.extensionType = "";
     }
     if (object.thoughtIds !== undefined && object.thoughtIds !== null) {
       for (const e of object.thoughtIds) {

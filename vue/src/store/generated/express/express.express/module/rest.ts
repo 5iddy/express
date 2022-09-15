@@ -9,6 +9,8 @@
  * ---------------------------------------------------------------
  */
 
+export type ExpressMsgCreateThoughtResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */

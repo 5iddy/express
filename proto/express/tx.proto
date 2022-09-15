@@ -7,7 +7,15 @@ option go_package = "express/x/express/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc CreateThought(MsgCreateThought) returns (MsgCreateThoughtResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgCreateThought {
+  string creator = 1;
+}
+
+message MsgCreateThoughtResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
