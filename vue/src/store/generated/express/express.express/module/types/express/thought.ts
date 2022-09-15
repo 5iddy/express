@@ -5,6 +5,7 @@ import { util, configure, Writer, Reader } from "protobufjs/minimal";
 export const protobufPackage = "express.express";
 
 export interface Thought {
+  /** Represents a single thought */
   index: number;
   content: string;
   isReply: boolean;

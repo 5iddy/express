@@ -1,0 +1,24 @@
+syntax = "proto3";
+package express.express;
+
+import "express/thought.proto"
+
+option go_package = "express/x/express/types";
+
+message Bubble {
+  // bubbleId
+  uint64 id = 1;
+  // Who created it -> creators wallet address
+  string creator = 2;
+  // Name or title of the bubble
+  string title = 3; 
+  // any extra info that needs to be stored with the bubble
+  // probably a json encoded string
+  string extension = 4; 
+  // any extra info that is needed to decode the extension string
+  string extensionType = 5;
+  // An array of thoughtIds that are part of this Bubble
+  repeated uint64 thoughtIds = 6; 
+  // An array of bubbleIds that are part of this Bubble
+  repeated uint64 bubbleIds = 7;
+}

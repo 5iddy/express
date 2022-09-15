@@ -23,6 +23,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type Thought struct {
+	// Represents a single thought
 	Index             uint64   `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"`
 	Content           string   `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
 	IsReply           bool     `protobuf:"varint,3,opt,name=isReply,proto3" json:"isReply,omitempty"`

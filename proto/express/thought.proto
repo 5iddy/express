@@ -3,14 +3,43 @@ package express.express;
 
 option go_package = "express/x/express/types";
 
+// Represents a single thought
 message Thought {
-  // Represents a single thought
-  uint64 index = 1; 
-  string content = 2; 
-  bool isReply = 3; 
-  uint64 replyForId = 4; 
-  uint64 replyForThoughtId = 5; 
-  repeated string categories = 6; 
-  repeated string tags = 7; 
-  string extension = 8; 
+  // index or id
+  uint64 id = 1; 
+  // Creator wallet Address
+  string creator = 2;
+  // main content max 4GB
+  // content will not will checked or read
+  string content = 3; 
+  // type of content, could be anything -> html | json | xml | markdown | text
+  // content type will not be checked
+  // it falls on the frontend dev to make sure that content and content type match
+  string contentType = 4;
+  // is this thought a reply to something ?
+  bool isReply = 5; 
+  // if it is a reply, reply to what thought id
+  uint64 replyForThoughtId = 6; 
+  // if it is a reply, reply to what bubble id
+  uint64 replyForBubbleId = 7;
+  // All the categories that this thought belongs to
+  repeated string categories = 8; 
+  // All the tags that this thought mentions
+  repeated string tags = 9; 
+  // Any extra info that needs to be stored as part of this thought
+  // this will most likely be a json encoded string
+  // extension will not be read nor its content will be checked
+  string extension = 10;
+  // any needed info about how to read extension
+  // extensionType and extension string wont be checked
+  // falls on the frontend dev to make sure they match
+  string extensionType = 11;
+  // Is this thought cloned from another thought?
+  bool isCloned = 12;
+  // if it is a clone, clone of what thoughtId
+  uint64 clonedFromThoughtId = 13;
+  // Is this thought created for a bubble?
+  bool isPartOfBubble = 14;
+  // if it is part of a bubble, what is the parent bubble id?
+  uint64 parentBubbleId = 15;
 }
