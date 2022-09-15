@@ -1,9 +1,10 @@
 import { txClient, queryClient, MissingWalletError , registry} from './module'
 
 import { Params } from "./module/types/express/params"
+import { Thought } from "./module/types/express/thought"
 
 
-export { Params };
+export { Params, Thought };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -45,6 +46,7 @@ const getDefaultState = () => {
 				
 				_Structure: {
 						Params: getStructure(Params.fromPartial({})),
+						Thought: getStructure(Thought.fromPartial({})),
 						
 		},
 		_Registry: registry,

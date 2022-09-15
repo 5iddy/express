@@ -1,0 +1,16 @@
+syntax = "proto3";
+package express.express;
+
+option go_package = "express/x/express/types";
+
+message Thought {
+  // Represents a single thought
+  uint64 index = 1; 
+  string content = 2; 
+  bool isReply = 3; 
+  uint64 replyForId = 4; 
+  uint64 replyForThoughtId = 5; 
+  repeated string categories = 6; 
+  repeated string tags = 7; 
+  string extension = 8; 
+}
