@@ -39,7 +39,15 @@ message Thought {
   // if it is a clone, clone of what thoughtId
   uint64 clonedFromThoughtId = 13;
   // Is this thought created for a bubble?
-  bool isPartOfBubble = 14;
+  bool isChildOfBubble = 14;
   // if it is part of a bubble, what is the parent bubble id?
   uint64 parentBubbleId = 15;
+  // an array of thoughtIds that created as replies to this Thought
+  repeated uint64 thoughtIdsOfReplies = 16;
+  // total thought replies created for this thought
+  uint64 totalReplyThoughts = 17;
+  // an array of BubbleIds that are created as replies for this thought
+  repeated uint64 bubbleIdsOfReplies = 18;
+  // total number of reply Bubbles that are created for this thought
+  uint64 totalReplyBubbles = 19;
 }

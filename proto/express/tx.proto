@@ -12,10 +12,40 @@ service Msg {
 }
 
 message MsgCreateThought {
+  // creator is must
   string creator = 1;
+  // content is also required
+  string content = 2;
+  // contentType is also required
+  string contentType = 3;
+  // optional
+  bool isReply = 4; 
+  // required only if isReply is true and not replyForBubbleId
+  uint64 replyForThoughtId = 5; 
+  // required only if isReply is true and no replyForThoughtId
+  uint64 replyForBubbleId = 6;
+  // optional
+  repeated string categories = 7;
+  // optional
+  repeated string tags = 8;
+  // optional
+  string extension = 9;
+  // required if extension is present
+  string extensionType = 10;
+  // optional
+  bool isCloned = 11;
+  // required if isCloned is true
+  uint64 clonedFromThoughtId = 12;
+  // optional
+  bool isChildOfBubble = 13;
+  // required if isPartOfBubble is true
+  uint64 parentBubbleId = 14;
 }
 
 message MsgCreateThoughtResponse {
+  uint64 id = 1;
+  bool successful = 2;
+  string message = 3;
 }
 
 // this line is used by starport scaffolding # proto/tx/message

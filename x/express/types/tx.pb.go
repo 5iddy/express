@@ -28,7 +28,34 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type MsgCreateThought struct {
+	// creator is must
 	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	// content is also required
+	Content string `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+	// contentType is also required
+	ContentType string `protobuf:"bytes,3,opt,name=contentType,proto3" json:"contentType,omitempty"`
+	// optional
+	IsReply bool `protobuf:"varint,4,opt,name=isReply,proto3" json:"isReply,omitempty"`
+	// required only if isReply is true and not replyForBubbleId
+	ReplyForThoughtId uint64 `protobuf:"varint,5,opt,name=replyForThoughtId,proto3" json:"replyForThoughtId,omitempty"`
+	// required only if isReply is true and no replyForThoughtId
+	ReplyForBubbleId uint64 `protobuf:"varint,6,opt,name=replyForBubbleId,proto3" json:"replyForBubbleId,omitempty"`
+	// optional
+	Categories []string `protobuf:"bytes,7,rep,name=categories,proto3" json:"categories,omitempty"`
+	// optional
+	Tags []string `protobuf:"bytes,8,rep,name=tags,proto3" json:"tags,omitempty"`
+	// optional
+	Extension string `protobuf:"bytes,9,opt,name=extension,proto3" json:"extension,omitempty"`
+	// required if extension is present
+	ExtensionType string `protobuf:"bytes,10,opt,name=extensionType,proto3" json:"extensionType,omitempty"`
+	// optional
+	IsCloned bool `protobuf:"varint,11,opt,name=isCloned,proto3" json:"isCloned,omitempty"`
+	// required if isCloned is true
+	ClonedFromThoughtId uint64 `protobuf:"varint,12,opt,name=clonedFromThoughtId,proto3" json:"clonedFromThoughtId,omitempty"`
+	// optional
+	IsChildOfBubble bool `protobuf:"varint,13,opt,name=isChildOfBubble,proto3" json:"isChildOfBubble,omitempty"`
+	// required if isPartOfBubble is true
+	ParentBubbleId uint64 `protobuf:"varint,14,opt,name=parentBubbleId,proto3" json:"parentBubbleId,omitempty"`
 }
 
 func (m *MsgCreateThought) Reset()         { *m = MsgCreateThought{} }
@@ -71,7 +98,101 @@ func (m *MsgCreateThought) GetCreator() string {
 	return ""
 }
 
+func (m *MsgCreateThought) GetContent() string {
+	if m != nil {
+		return m.Content
+	}
+	return ""
+}
+
+func (m *MsgCreateThought) GetContentType() string {
+	if m != nil {
+		return m.ContentType
+	}
+	return ""
+}
+
+func (m *MsgCreateThought) GetIsReply() bool {
+	if m != nil {
+		return m.IsReply
+	}
+	return false
+}
+
+func (m *MsgCreateThought) GetReplyForThoughtId() uint64 {
+	if m != nil {
+		return m.ReplyForThoughtId
+	}
+	return 0
+}
+
+func (m *MsgCreateThought) GetReplyForBubbleId() uint64 {
+	if m != nil {
+		return m.ReplyForBubbleId
+	}
+	return 0
+}
+
+func (m *MsgCreateThought) GetCategories() []string {
+	if m != nil {
+		return m.Categories
+	}
+	return nil
+}
+
+func (m *MsgCreateThought) GetTags() []string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+func (m *MsgCreateThought) GetExtension() string {
+	if m != nil {
+		return m.Extension
+	}
+	return ""
+}
+
+func (m *MsgCreateThought) GetExtensionType() string {
+	if m != nil {
+		return m.ExtensionType
+	}
+	return ""
+}
+
+func (m *MsgCreateThought) GetIsCloned() bool {
+	if m != nil {
+		return m.IsCloned
+	}
+	return false
+}
+
+func (m *MsgCreateThought) GetClonedFromThoughtId() uint64 {
+	if m != nil {
+		return m.ClonedFromThoughtId
+	}
+	return 0
+}
+
+func (m *MsgCreateThought) GetIsChildOfBubble() bool {
+	if m != nil {
+		return m.IsChildOfBubble
+	}
+	return false
+}
+
+func (m *MsgCreateThought) GetParentBubbleId() uint64 {
+	if m != nil {
+		return m.ParentBubbleId
+	}
+	return 0
+}
+
 type MsgCreateThoughtResponse struct {
+	Id         uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Successful bool   `protobuf:"varint,2,opt,name=successful,proto3" json:"successful,omitempty"`
+	Message    string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
 }
 
 func (m *MsgCreateThoughtResponse) Reset()         { *m = MsgCreateThoughtResponse{} }
@@ -107,6 +228,27 @@ func (m *MsgCreateThoughtResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCreateThoughtResponse proto.InternalMessageInfo
 
+func (m *MsgCreateThoughtResponse) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *MsgCreateThoughtResponse) GetSuccessful() bool {
+	if m != nil {
+		return m.Successful
+	}
+	return false
+}
+
+func (m *MsgCreateThoughtResponse) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*MsgCreateThought)(nil), "express.express.MsgCreateThought")
 	proto.RegisterType((*MsgCreateThoughtResponse)(nil), "express.express.MsgCreateThoughtResponse")
@@ -115,18 +257,34 @@ func init() {
 func init() { proto.RegisterFile("express/tx.proto", fileDescriptor_a60b39c32a414668) }
 
 var fileDescriptor_a60b39c32a414668 = []byte{
-	// 173 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x48, 0xad, 0x28, 0x28,
-	0x4a, 0x2d, 0x2e, 0xd6, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x87, 0x8a,
-	0xe8, 0x41, 0x69, 0x25, 0x1d, 0x2e, 0x01, 0xdf, 0xe2, 0x74, 0xe7, 0xa2, 0xd4, 0xc4, 0x92, 0xd4,
-	0x90, 0x8c, 0xfc, 0xd2, 0xf4, 0x8c, 0x12, 0x21, 0x09, 0x2e, 0xf6, 0x64, 0x90, 0x40, 0x7e, 0x91,
-	0x04, 0xa3, 0x02, 0xa3, 0x06, 0x67, 0x10, 0x8c, 0xab, 0x24, 0xc5, 0x25, 0x81, 0xae, 0x3a, 0x28,
-	0xb5, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0xd5, 0x28, 0x85, 0x8b, 0xd9, 0xb7, 0x38, 0x5d, 0x28, 0x96,
-	0x8b, 0x17, 0xd5, 0x34, 0x45, 0x3d, 0x34, 0x3b, 0xf5, 0xd0, 0x8d, 0x90, 0xd2, 0x24, 0xa8, 0x04,
-	0x66, 0x8b, 0x93, 0xe1, 0x89, 0x47, 0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31, 0x3e, 0x78, 0x24, 0xc7,
-	0x38, 0xe1, 0xb1, 0x1c, 0xc3, 0x85, 0xc7, 0x72, 0x0c, 0x37, 0x1e, 0xcb, 0x31, 0x44, 0x89, 0xc3,
-	0x3c, 0x5b, 0xa1, 0x0f, 0xf7, 0x76, 0x65, 0x41, 0x6a, 0x71, 0x12, 0x1b, 0xd8, 0xeb, 0xc6, 0x80,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0x4f, 0x46, 0x93, 0x81, 0x0e, 0x01, 0x00, 0x00,
+	// 429 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x93, 0xcf, 0x6a, 0xdb, 0x40,
+	0x10, 0xc6, 0x2d, 0xdb, 0x4d, 0xec, 0x49, 0xed, 0xb8, 0xd3, 0x43, 0x97, 0x50, 0x84, 0x1a, 0x4a,
+	0x51, 0x4b, 0x71, 0xfa, 0xe7, 0x0d, 0x62, 0x08, 0xe4, 0x10, 0x0a, 0x22, 0xa7, 0x42, 0x0f, 0xb2,
+	0x34, 0x91, 0x17, 0x14, 0xad, 0xd8, 0x59, 0x83, 0xfd, 0x16, 0x7d, 0xac, 0x1e, 0x73, 0xec, 0xb1,
+	0xd8, 0xaf, 0xd0, 0x07, 0x28, 0x9e, 0x48, 0x8e, 0x23, 0x17, 0x72, 0xd2, 0x7c, 0xbf, 0x6f, 0xb5,
+	0xec, 0xb7, 0x33, 0x0b, 0x23, 0x5a, 0x94, 0x96, 0x98, 0xcf, 0xdc, 0x62, 0x5c, 0x5a, 0xe3, 0x0c,
+	0x1e, 0x57, 0x64, 0x5c, 0x7d, 0x4f, 0xff, 0x76, 0x60, 0x74, 0xc5, 0xd9, 0xc4, 0x52, 0xec, 0xe8,
+	0x7a, 0x66, 0xe6, 0xd9, 0xcc, 0xa1, 0x82, 0xc3, 0x64, 0x03, 0x8c, 0x55, 0x5e, 0xe0, 0x85, 0xfd,
+	0xa8, 0x96, 0xe2, 0x98, 0xc2, 0x51, 0xe1, 0x54, 0xbb, 0x72, 0xee, 0x25, 0x06, 0x70, 0x54, 0x95,
+	0xd7, 0xcb, 0x92, 0x54, 0x47, 0xdc, 0x5d, 0xb4, 0xf9, 0x57, 0x73, 0x44, 0x65, 0xbe, 0x54, 0xdd,
+	0xc0, 0x0b, 0x7b, 0x51, 0x2d, 0xf1, 0x23, 0xbc, 0xb0, 0x9b, 0xe2, 0xc2, 0xd8, 0xea, 0x08, 0x97,
+	0xa9, 0x7a, 0x16, 0x78, 0x61, 0x37, 0xda, 0x37, 0xf0, 0x03, 0x8c, 0x6a, 0x78, 0x3e, 0x9f, 0x4e,
+	0x73, 0xba, 0x4c, 0xd5, 0x81, 0x2c, 0xde, 0xe3, 0xe8, 0x03, 0x24, 0xb1, 0xa3, 0xcc, 0x58, 0x4d,
+	0xac, 0x0e, 0x83, 0x4e, 0xd8, 0x8f, 0x76, 0x08, 0x22, 0x74, 0x5d, 0x9c, 0xb1, 0xea, 0x89, 0x23,
+	0x35, 0xbe, 0x86, 0x3e, 0x2d, 0x1c, 0x15, 0xac, 0x4d, 0xa1, 0xfa, 0x92, 0xe3, 0x01, 0xe0, 0x5b,
+	0x18, 0x6c, 0x85, 0x24, 0x05, 0x59, 0xf1, 0x18, 0xe2, 0x09, 0xf4, 0x34, 0x4f, 0x72, 0x53, 0x50,
+	0xaa, 0x8e, 0x24, 0xec, 0x56, 0xe3, 0x27, 0x78, 0x99, 0x48, 0x75, 0x61, 0xcd, 0xed, 0x43, 0xde,
+	0xe7, 0x12, 0xe1, 0x7f, 0x16, 0x86, 0x70, 0xac, 0x79, 0x32, 0xd3, 0x79, 0xfa, 0xed, 0xe6, 0x3e,
+	0x9a, 0x1a, 0xc8, 0xa6, 0x4d, 0x8c, 0xef, 0x60, 0x58, 0xc6, 0x96, 0x0a, 0xb7, 0xbd, 0x99, 0xa1,
+	0x6c, 0xdb, 0xa0, 0xa7, 0x29, 0xa8, 0x66, 0xd7, 0x23, 0xe2, 0xd2, 0x14, 0x4c, 0x38, 0x84, 0xb6,
+	0x4e, 0xa5, 0xf1, 0xdd, 0xa8, 0xad, 0xe5, 0x0e, 0x79, 0x9e, 0x24, 0xc4, 0x7c, 0x33, 0xcf, 0xa5,
+	0xed, 0xbd, 0x68, 0x87, 0x6c, 0xfa, 0x7a, 0x4b, 0xcc, 0x71, 0x56, 0x77, 0xbd, 0x96, 0x5f, 0x52,
+	0xe8, 0x5c, 0x71, 0x86, 0x3f, 0x60, 0xf0, 0x78, 0xbe, 0xde, 0x8c, 0x1b, 0x63, 0x38, 0x6e, 0x1e,
+	0xe6, 0xe4, 0xfd, 0x93, 0x4b, 0xea, 0xf3, 0x9e, 0x7f, 0xfe, 0xb5, 0xf2, 0xbd, 0xbb, 0x95, 0xef,
+	0xfd, 0x59, 0xf9, 0xde, 0xcf, 0xb5, 0xdf, 0xba, 0x5b, 0xfb, 0xad, 0xdf, 0x6b, 0xbf, 0xf5, 0xfd,
+	0x55, 0x3d, 0xff, 0x8b, 0xb3, 0xed, 0x4b, 0x58, 0x96, 0xc4, 0xd3, 0x03, 0x79, 0x0d, 0x5f, 0xff,
+	0x05, 0x00, 0x00, 0xff, 0xff, 0xf9, 0x44, 0xcb, 0x8a, 0x21, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -229,6 +387,102 @@ func (m *MsgCreateThought) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ParentBubbleId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ParentBubbleId))
+		i--
+		dAtA[i] = 0x70
+	}
+	if m.IsChildOfBubble {
+		i--
+		if m.IsChildOfBubble {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x68
+	}
+	if m.ClonedFromThoughtId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ClonedFromThoughtId))
+		i--
+		dAtA[i] = 0x60
+	}
+	if m.IsCloned {
+		i--
+		if m.IsCloned {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x58
+	}
+	if len(m.ExtensionType) > 0 {
+		i -= len(m.ExtensionType)
+		copy(dAtA[i:], m.ExtensionType)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ExtensionType)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.Extension) > 0 {
+		i -= len(m.Extension)
+		copy(dAtA[i:], m.Extension)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Extension)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.Tags) > 0 {
+		for iNdEx := len(m.Tags) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Tags[iNdEx])
+			copy(dAtA[i:], m.Tags[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Tags[iNdEx])))
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.Categories) > 0 {
+		for iNdEx := len(m.Categories) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Categories[iNdEx])
+			copy(dAtA[i:], m.Categories[iNdEx])
+			i = encodeVarintTx(dAtA, i, uint64(len(m.Categories[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if m.ReplyForBubbleId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ReplyForBubbleId))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.ReplyForThoughtId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ReplyForThoughtId))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.IsReply {
+		i--
+		if m.IsReply {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.ContentType) > 0 {
+		i -= len(m.ContentType)
+		copy(dAtA[i:], m.ContentType)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ContentType)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Content) > 0 {
+		i -= len(m.Content)
+		copy(dAtA[i:], m.Content)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Content)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
 		copy(dAtA[i:], m.Creator)
@@ -259,6 +513,28 @@ func (m *MsgCreateThoughtResponse) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if len(m.Message) > 0 {
+		i -= len(m.Message)
+		copy(dAtA[i:], m.Message)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Message)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Successful {
+		i--
+		if m.Successful {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -283,6 +559,55 @@ func (m *MsgCreateThought) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
+	l = len(m.Content)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.ContentType)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.IsReply {
+		n += 2
+	}
+	if m.ReplyForThoughtId != 0 {
+		n += 1 + sovTx(uint64(m.ReplyForThoughtId))
+	}
+	if m.ReplyForBubbleId != 0 {
+		n += 1 + sovTx(uint64(m.ReplyForBubbleId))
+	}
+	if len(m.Categories) > 0 {
+		for _, s := range m.Categories {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if len(m.Tags) > 0 {
+		for _, s := range m.Tags {
+			l = len(s)
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = len(m.Extension)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.ExtensionType)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.IsCloned {
+		n += 2
+	}
+	if m.ClonedFromThoughtId != 0 {
+		n += 1 + sovTx(uint64(m.ClonedFromThoughtId))
+	}
+	if m.IsChildOfBubble {
+		n += 2
+	}
+	if m.ParentBubbleId != 0 {
+		n += 1 + sovTx(uint64(m.ParentBubbleId))
+	}
 	return n
 }
 
@@ -292,6 +617,16 @@ func (m *MsgCreateThoughtResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
+	if m.Successful {
+		n += 2
+	}
+	l = len(m.Message)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
 	return n
 }
 
@@ -362,6 +697,334 @@ func (m *MsgCreateThought) Unmarshal(dAtA []byte) error {
 			}
 			m.Creator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Content = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContentType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ContentType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsReply", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsReply = bool(v != 0)
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReplyForThoughtId", wireType)
+			}
+			m.ReplyForThoughtId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ReplyForThoughtId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReplyForBubbleId", wireType)
+			}
+			m.ReplyForBubbleId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ReplyForBubbleId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Categories", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Categories = append(m.Categories, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Tags = append(m.Tags, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Extension", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Extension = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExtensionType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExtensionType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsCloned", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsCloned = bool(v != 0)
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClonedFromThoughtId", wireType)
+			}
+			m.ClonedFromThoughtId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ClonedFromThoughtId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 13:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsChildOfBubble", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsChildOfBubble = bool(v != 0)
+		case 14:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ParentBubbleId", wireType)
+			}
+			m.ParentBubbleId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ParentBubbleId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -412,6 +1075,77 @@ func (m *MsgCreateThoughtResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgCreateThoughtResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Successful", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Successful = bool(v != 0)
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Message = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

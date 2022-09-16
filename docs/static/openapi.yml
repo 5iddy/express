@@ -47180,6 +47180,14 @@ definitions:
       response type.
   express.express.MsgCreateThoughtResponse:
     type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+      successful:
+        type: boolean
+      message:
+        type: string
   express.express.Params:
     type: object
     description: Params defines the parameters for the module.

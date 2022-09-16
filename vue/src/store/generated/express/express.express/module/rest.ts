@@ -9,7 +9,12 @@
  * ---------------------------------------------------------------
  */
 
-export type ExpressMsgCreateThoughtResponse = object;
+export interface ExpressMsgCreateThoughtResponse {
+  /** @format uint64 */
+  id?: string;
+  successful?: boolean;
+  message?: string;
+}
 
 /**
  * Params defines the parameters for the module.

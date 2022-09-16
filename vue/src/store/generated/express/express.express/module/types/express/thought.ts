@@ -48,9 +48,17 @@ export interface Thought {
   /** if it is a clone, clone of what thoughtId */
   clonedFromThoughtId: number;
   /** Is this thought created for a bubble? */
-  isPartOfBubble: boolean;
+  isChildOfBubble: boolean;
   /** if it is part of a bubble, what is the parent bubble id? */
   parentBubbleId: number;
+  /** an array of thoughtIds that created as replies to this Thought */
+  thoughtIdsOfReplies: number[];
+  /** total thought replies created for this thought */
+  totalReplyThoughts: number;
+  /** an array of BubbleIds that are created as replies for this thought */
+  bubbleIdsOfReplies: number[];
+  /** total number of reply Bubbles that are created for this thought */
+  totalReplyBubbles: number;
 }
 
 const baseThought: object = {
@@ -67,8 +75,12 @@ const baseThought: object = {
   extensionType: "",
   isCloned: false,
   clonedFromThoughtId: 0,
-  isPartOfBubble: false,
+  isChildOfBubble: false,
   parentBubbleId: 0,
+  thoughtIdsOfReplies: 0,
+  totalReplyThoughts: 0,
+  bubbleIdsOfReplies: 0,
+  totalReplyBubbles: 0,
 };
 
 export const Thought = {
@@ -112,11 +124,27 @@ export const Thought = {
     if (message.clonedFromThoughtId !== 0) {
       writer.uint32(104).uint64(message.clonedFromThoughtId);
     }
-    if (message.isPartOfBubble === true) {
-      writer.uint32(112).bool(message.isPartOfBubble);
+    if (message.isChildOfBubble === true) {
+      writer.uint32(112).bool(message.isChildOfBubble);
     }
     if (message.parentBubbleId !== 0) {
       writer.uint32(120).uint64(message.parentBubbleId);
+    }
+    writer.uint32(130).fork();
+    for (const v of message.thoughtIdsOfReplies) {
+      writer.uint64(v);
+    }
+    writer.ldelim();
+    if (message.totalReplyThoughts !== 0) {
+      writer.uint32(136).uint64(message.totalReplyThoughts);
+    }
+    writer.uint32(146).fork();
+    for (const v of message.bubbleIdsOfReplies) {
+      writer.uint64(v);
+    }
+    writer.ldelim();
+    if (message.totalReplyBubbles !== 0) {
+      writer.uint32(152).uint64(message.totalReplyBubbles);
     }
     return writer;
   },
@@ -127,6 +155,8 @@ export const Thought = {
     const message = { ...baseThought } as Thought;
     message.categories = [];
     message.tags = [];
+    message.thoughtIdsOfReplies = [];
+    message.bubbleIdsOfReplies = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -170,10 +200,44 @@ export const Thought = {
           message.clonedFromThoughtId = longToNumber(reader.uint64() as Long);
           break;
         case 14:
-          message.isPartOfBubble = reader.bool();
+          message.isChildOfBubble = reader.bool();
           break;
         case 15:
           message.parentBubbleId = longToNumber(reader.uint64() as Long);
+          break;
+        case 16:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.thoughtIdsOfReplies.push(
+                longToNumber(reader.uint64() as Long)
+              );
+            }
+          } else {
+            message.thoughtIdsOfReplies.push(
+              longToNumber(reader.uint64() as Long)
+            );
+          }
+          break;
+        case 17:
+          message.totalReplyThoughts = longToNumber(reader.uint64() as Long);
+          break;
+        case 18:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.bubbleIdsOfReplies.push(
+                longToNumber(reader.uint64() as Long)
+              );
+            }
+          } else {
+            message.bubbleIdsOfReplies.push(
+              longToNumber(reader.uint64() as Long)
+            );
+          }
+          break;
+        case 19:
+          message.totalReplyBubbles = longToNumber(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -187,6 +251,8 @@ export const Thought = {
     const message = { ...baseThought } as Thought;
     message.categories = [];
     message.tags = [];
+    message.thoughtIdsOfReplies = [];
+    message.bubbleIdsOfReplies = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = Number(object.id);
     } else {
@@ -261,15 +327,50 @@ export const Thought = {
     } else {
       message.clonedFromThoughtId = 0;
     }
-    if (object.isPartOfBubble !== undefined && object.isPartOfBubble !== null) {
-      message.isPartOfBubble = Boolean(object.isPartOfBubble);
+    if (
+      object.isChildOfBubble !== undefined &&
+      object.isChildOfBubble !== null
+    ) {
+      message.isChildOfBubble = Boolean(object.isChildOfBubble);
     } else {
-      message.isPartOfBubble = false;
+      message.isChildOfBubble = false;
     }
     if (object.parentBubbleId !== undefined && object.parentBubbleId !== null) {
       message.parentBubbleId = Number(object.parentBubbleId);
     } else {
       message.parentBubbleId = 0;
+    }
+    if (
+      object.thoughtIdsOfReplies !== undefined &&
+      object.thoughtIdsOfReplies !== null
+    ) {
+      for (const e of object.thoughtIdsOfReplies) {
+        message.thoughtIdsOfReplies.push(Number(e));
+      }
+    }
+    if (
+      object.totalReplyThoughts !== undefined &&
+      object.totalReplyThoughts !== null
+    ) {
+      message.totalReplyThoughts = Number(object.totalReplyThoughts);
+    } else {
+      message.totalReplyThoughts = 0;
+    }
+    if (
+      object.bubbleIdsOfReplies !== undefined &&
+      object.bubbleIdsOfReplies !== null
+    ) {
+      for (const e of object.bubbleIdsOfReplies) {
+        message.bubbleIdsOfReplies.push(Number(e));
+      }
+    }
+    if (
+      object.totalReplyBubbles !== undefined &&
+      object.totalReplyBubbles !== null
+    ) {
+      message.totalReplyBubbles = Number(object.totalReplyBubbles);
+    } else {
+      message.totalReplyBubbles = 0;
     }
     return message;
   },
@@ -302,10 +403,24 @@ export const Thought = {
     message.isCloned !== undefined && (obj.isCloned = message.isCloned);
     message.clonedFromThoughtId !== undefined &&
       (obj.clonedFromThoughtId = message.clonedFromThoughtId);
-    message.isPartOfBubble !== undefined &&
-      (obj.isPartOfBubble = message.isPartOfBubble);
+    message.isChildOfBubble !== undefined &&
+      (obj.isChildOfBubble = message.isChildOfBubble);
     message.parentBubbleId !== undefined &&
       (obj.parentBubbleId = message.parentBubbleId);
+    if (message.thoughtIdsOfReplies) {
+      obj.thoughtIdsOfReplies = message.thoughtIdsOfReplies.map((e) => e);
+    } else {
+      obj.thoughtIdsOfReplies = [];
+    }
+    message.totalReplyThoughts !== undefined &&
+      (obj.totalReplyThoughts = message.totalReplyThoughts);
+    if (message.bubbleIdsOfReplies) {
+      obj.bubbleIdsOfReplies = message.bubbleIdsOfReplies.map((e) => e);
+    } else {
+      obj.bubbleIdsOfReplies = [];
+    }
+    message.totalReplyBubbles !== undefined &&
+      (obj.totalReplyBubbles = message.totalReplyBubbles);
     return obj;
   },
 
@@ -313,6 +428,8 @@ export const Thought = {
     const message = { ...baseThought } as Thought;
     message.categories = [];
     message.tags = [];
+    message.thoughtIdsOfReplies = [];
+    message.bubbleIdsOfReplies = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -387,15 +504,50 @@ export const Thought = {
     } else {
       message.clonedFromThoughtId = 0;
     }
-    if (object.isPartOfBubble !== undefined && object.isPartOfBubble !== null) {
-      message.isPartOfBubble = object.isPartOfBubble;
+    if (
+      object.isChildOfBubble !== undefined &&
+      object.isChildOfBubble !== null
+    ) {
+      message.isChildOfBubble = object.isChildOfBubble;
     } else {
-      message.isPartOfBubble = false;
+      message.isChildOfBubble = false;
     }
     if (object.parentBubbleId !== undefined && object.parentBubbleId !== null) {
       message.parentBubbleId = object.parentBubbleId;
     } else {
       message.parentBubbleId = 0;
+    }
+    if (
+      object.thoughtIdsOfReplies !== undefined &&
+      object.thoughtIdsOfReplies !== null
+    ) {
+      for (const e of object.thoughtIdsOfReplies) {
+        message.thoughtIdsOfReplies.push(e);
+      }
+    }
+    if (
+      object.totalReplyThoughts !== undefined &&
+      object.totalReplyThoughts !== null
+    ) {
+      message.totalReplyThoughts = object.totalReplyThoughts;
+    } else {
+      message.totalReplyThoughts = 0;
+    }
+    if (
+      object.bubbleIdsOfReplies !== undefined &&
+      object.bubbleIdsOfReplies !== null
+    ) {
+      for (const e of object.bubbleIdsOfReplies) {
+        message.bubbleIdsOfReplies.push(e);
+      }
+    }
+    if (
+      object.totalReplyBubbles !== undefined &&
+      object.totalReplyBubbles !== null
+    ) {
+      message.totalReplyBubbles = object.totalReplyBubbles;
+    } else {
+      message.totalReplyBubbles = 0;
     }
     return message;
   },
