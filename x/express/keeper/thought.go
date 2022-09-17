@@ -32,26 +32,18 @@ func (k Keeper) IncrementThoughtCount(ctx sdk.Context) (previousValue uint64, up
 	return previousValue, updatedValue
 }
 
-func (k Keeper) AddThought(ctx sdk.Context, thought types.Thought) uint64 {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.ThoughtKeyPrefix))
-	thoughtInBytes := k.cdc.MustMarshal(&thought)
+func (k Keeper) AddThought(ctx sdk.Context, thought *types.Thought) uint64 {
 	currentThoughtCount := k.GetThoughtCount(ctx)
-	id := currentThoughtCount + 1
-	idByteKey := make([]byte, 8)
-	binary.BigEndian.PutUint64(idByteKey, id)
-	store.Set(idByteKey, thoughtInBytes)
-	return id
+	thought.Id = currentThoughtCount
+	currentThoughtCount += 1
+	k.SetThought(ctx, thought)
+	return thought.Id
 }
 
-func (k Keeper) DeleteThought(ctx sdk.Context, creator string, thoughtId uint64) error {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.ThoughtKeyPrefix))
-	thoughtIdInBytes := make([]byte, 8)
-	binary.BigEndian.PutUint64(thoughtIdInBytes, thoughtId)
-	thoughtInBytes := store.Get(thoughtIdInBytes)
-	var thought types.Thought
-	k.cdc.MustUnmarshal(thoughtInBytes, &thought)
-	if thought.Creator == creator {
-		store.Delete(thoughtIdInBytes)
+func (k Keeper) DeleteThought(ctx sdk.Context, thought *types.Thought) error {
+	currentThought := k.GetThought(ctx, thought.Id)
+	if currentThought.Creator == thought.Creator {
+		k.SetThought(ctx, thought)
 		return nil
 	} else {
 		err := sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "cannot delete thought if you're not the owner")
@@ -59,17 +51,10 @@ func (k Keeper) DeleteThought(ctx sdk.Context, creator string, thoughtId uint64)
 	}
 }
 
-func (k Keeper) EditThought(ctx sdk.Context, thoughtId uint64, creator string, content string) error {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.ThoughtKeyPrefix))
-	thoughtIdInBytes := make([]byte, 8)
-	binary.BigEndian.PutUint64(thoughtIdInBytes, thoughtId)
-	thoughtInBytes := store.Get(thoughtIdInBytes)
-	var thought types.Thought
-	k.cdc.MustUnmarshal(thoughtInBytes, &thought)
-	if thought.Creator == creator {
-		thought.Content = content
-		newThoughtInBytes := k.cdc.MustMarshal(&thought)
-		store.Set(thoughtIdInBytes, newThoughtInBytes)
+func (k Keeper) EditThought(ctx sdk.Context, thought *types.Thought) error {
+	currentThought := k.GetThought(ctx, thought.Id)
+	if currentThought.Creator == thought.Creator {
+		k.SetThought(ctx, thought)
 		return nil
 	} else {
 		err := sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "cannot edit thought if you're not the owner")
@@ -85,4 +70,12 @@ func (k Keeper) GetThought(ctx sdk.Context, thoughtId uint64) *types.Thought {
 	var thought types.Thought
 	k.cdc.MustUnmarshal(thoughtInBytes, &thought)
 	return &thought
+}
+
+func (k Keeper) SetThought(ctx sdk.Context, thought *types.Thought) {
+	thoughtStore := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.ThoughtKeyPrefix))
+	thoughtIdInBytes := make([]byte, 8)
+	binary.BigEndian.PutUint64(thoughtIdInBytes, thought.Id)
+	thoughtInBytes := k.cdc.MustMarshal(thought)
+	thoughtStore.Set(thoughtIdInBytes, thoughtInBytes)
 }
